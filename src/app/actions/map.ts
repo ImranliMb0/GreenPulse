@@ -37,14 +37,14 @@ export async function getRenewablePotential(
       return { success: false, error: "No hourly data available for this location." };
     }
 
-    const avgSolar = solarData.reduce((a:number, b:number) => a + b, 0) / solarData.length;
-    const avgWind = windData.reduce((a:number, b:number) => a + b, 0) / windData.length;
+    const avgSolar = solarData.reduce((a:number, b:number) => a + (b || 0), 0) / solarData.length;
+    const avgWind = windData.reduce((a:number, b:number) => a + (b || 0), 0) / windData.length;
     
     // Heuristic for renewable index.
     // Normalized solar contribution (assuming max ~800 W/m^2 as excellent)
     // Normalized wind contribution (assuming max ~12 m/s as excellent)
-    const solarFactor = avgSolar / 800;
-    const windFactor = avgWind / 12;
+    const solarFactor = Math.min(1, avgSolar / 800);
+    const windFactor = Math.min(1, avgWind / 12);
     const renewableIndex = Math.min(100, Math.round(((solarFactor + windFactor) / 2) * 100));
 
 

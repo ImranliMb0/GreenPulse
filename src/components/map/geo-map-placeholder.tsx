@@ -56,12 +56,6 @@ export function GeoMap() {
         setLoading(false);
     }
   };
-
-  const getPotentialLabel = (index: number) => {
-      if (index > 66) return 'High';
-      if (index > 33) return 'Medium';
-      return 'Low';
-  }
   
   const getPotentialColor = (index: number) => {
       if (index > 66) return 'text-green-500';
@@ -144,4 +138,3 @@ export function GeoMap() {
     </Card>
   );
 }
-
