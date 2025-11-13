@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -5,12 +6,13 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useState } from "react";
 import { getRenewablePotential } from "@/app/actions/map";
-import { Loader2, Sun, Wind } from "lucide-react";
+import { Loader2, Sun, Wind, Gauge } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type PotentialData = {
-    solarPotential: number;
-    windPotential: number;
+    avgSolar: number;
+    avgWind: number;
+    renewableIndex: number;
     units: {
         solar: string;
         wind: string;
@@ -55,17 +57,18 @@ export function GeoMap() {
     }
   };
 
-  const getPotentialLabel = (value: number, type: 'solar' | 'wind') => {
-      if (type === 'solar') {
-          if (value > 600) return 'High';
-          if (value > 300) return 'Medium';
-          return 'Low';
-      } else { // wind
-          if (value > 8) return 'High';
-          if (value > 4) return 'Medium';
-          return 'Low';
-      }
+  const getPotentialLabel = (index: number) => {
+      if (index > 66) return 'High';
+      if (index > 33) return 'Medium';
+      return 'Low';
   }
+  
+  const getPotentialColor = (index: number) => {
+      if (index > 66) return 'text-green-500';
+      if (index > 33) return 'text-yellow-600';
+      return 'text-red-500';
+  }
+
 
   return (
     <Card>
@@ -93,24 +96,30 @@ export function GeoMap() {
                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
                 ) : potential ? (
                     <div className="p-2 bg-card rounded-lg shadow-lg border text-sm w-48">
-                        <h4 className="font-bold mb-2 font-headline">Potential</h4>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Sun className="w-4 h-4 text-yellow-500" />
-                                <span>Solar:</span>
-                            </div>
-                            <span className={`font-medium ${getPotentialLabel(potential.solarPotential, 'solar') === 'High' ? 'text-green-500' : getPotentialLabel(potential.solarPotential, 'solar') === 'Medium' ? 'text-yellow-600' : 'text-red-500'}`}>
-                                {getPotentialLabel(potential.solarPotential, 'solar')}
+                        <h4 className="font-bold mb-2 font-headline flex items-center gap-2">
+                           <Gauge className="w-4 h-4"/> Renewable Index
+                        </h4>
+                        <div className="text-center mb-2">
+                            <span className={`text-2xl font-bold ${getPotentialColor(potential.renewableIndex)}`}>
+                                {potential.renewableIndex}
                             </span>
+                            <span className="text-xs text-muted-foreground"> / 100</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                             <div className="flex items-center gap-2">
-                                <Wind className="w-4 h-4 text-blue-500" />
-                                <span>Wind:</span>
+                        <div className="text-xs space-y-1 text-muted-foreground">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1">
+                                    <Sun className="w-3 h-3 text-yellow-500" />
+                                    <span>Solar:</span>
+                                </div>
+                                <span>{potential.avgSolar} {potential.units.solar}</span>
                             </div>
-                            <span className={`font-medium ${getPotentialLabel(potential.windPotential, 'wind') === 'High' ? 'text-green-500' : getPotentialLabel(potential.windPotential, 'wind') === 'Medium' ? 'text-yellow-600' : 'text-red-500'}`}>
-                                {getPotentialLabel(potential.windPotential, 'wind')}
-                            </span>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1">
+                                    <Wind className="w-3 h-3 text-blue-500" />
+                                    <span>Wind:</span>
+                                </div>
+                                <span>{potential.avgWind} {potential.units.wind}</span>
+                            </div>
                         </div>
                     </div>
                 ) : null}
@@ -135,3 +144,4 @@ export function GeoMap() {
     </Card>
   );
 }
+
