@@ -5,6 +5,8 @@ import { z } from "zod";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import type { CarbonReport } from "@/lib/types";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError, type SecurityRuleContext } from "@/firebase/errors";
 
 const ReportInputSchema = z.object({
   energyUsedKwh: z.number(),
@@ -38,7 +40,6 @@ export async function createCarbonReport(
 
   const { energyUsedKwh, location, userId } = validation.data;
 
-  try {
     // In a real app, you would call the Climatiq or Carbon Interface API here.
     // We'll simulate it using mock factors.
     const emissionFactor = emissionFactors[location] || 0.5;
@@ -53,15 +54,21 @@ export async function createCarbonReport(
       solarPotential,
     };
     
+    const reportsRef = collection(db, "users", userId, "reports");
+    
     // Add server timestamp when saving to Firestore
-    await addDoc(collection(db, "users", userId, "reports"), {
+    addDoc(reportsRef, {
       ...reportData,
       timestamp: serverTimestamp(),
+    }).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: reportsRef.path,
+          operation: 'create',
+          requestResourceData: reportData,
+        } satisfies SecurityRuleContext);
+
+        errorEmitter.emit('permission-error', permissionError);
     });
 
     return { success: true, data: { emissionKg, solarPotential } };
-  } catch (error: any) {
-    console.error("Error creating carbon report:", error);
-    return { success: false, error: error.message || "An unknown error occurred." };
-  }
 }
