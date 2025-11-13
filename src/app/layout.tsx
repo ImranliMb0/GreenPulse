@@ -4,8 +4,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 
 export const metadata: Metadata = {
-  title: 'Weather API',
-  description: 'Weather API Platform',
+  title: 'GreenPulse Cloud',
+  description: 'AI Platform for Renewable Energy Deployment & Carbon Transparency',
   icons: {
     icon: '/icon.svg',
   },
