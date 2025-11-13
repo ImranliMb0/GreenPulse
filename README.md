@@ -16,7 +16,7 @@ Welcome to GreenPulse Cloud, an AI-powered platform designed to accelerate renew
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
 *   **Authentication & Database**: [Firebase](https://firebase.google.com/) (Authentication and Firestore)
 *   **Generative AI**: [Genkit](https://firebase.google.com/docs/genkit)
-*   **Deployment**: [Firebase App Hosting](https://firebase.google.com/docs/app-hosting)
+
 
 ## Getting Started
 
