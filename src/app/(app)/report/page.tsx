@@ -1,3 +1,6 @@
+
+'use client';
+
 import {KwhCo2Calculator} from '@/components/report/kwh-co2-calculator';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {carbonIntensityData} from '@/lib/carbon-intensity-data';
@@ -10,11 +13,25 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {Separator} from '@/components/ui/separator';
+import { ReportsTable } from '@/components/report/reports-table';
+import { useAuth } from '@/hooks/use-auth';
+import { Loader2 } from 'lucide-react';
 
 export default function ReportPage() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <KwhCo2Calculator />
+      {user && <ReportsTable userId={user.uid} />}
 
       <Card>
         <CardHeader>
