@@ -9,10 +9,8 @@ service cloud.firestore {
 
       // Rules for the 'reports' subcollection
       match /reports/{reportId} {
-        // Allow users to create and read their own reports.
-        allow create, read: if request.auth != null && request.auth.uid == userId;
-        // Allow users to list their own reports.
-        allow list: if request.auth != null && request.auth.uid == userId;
+        // Allow users to create, read, and list their own reports.
+        allow create, read, list: if request.auth != null && request.auth.uid == userId;
       }
     }
   }
