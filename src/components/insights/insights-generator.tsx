@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -38,12 +39,16 @@ export function InsightsGenerator() {
                 comparisonData,
             });
             setInsights(result);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            let description = 'The AI model could not be reached. Please try again later.';
+            if (error instanceof Error && error.message.includes('503')) {
+                description = 'The AI model is currently overloaded. Please try again in a few moments.';
+            }
             toast({
                 variant: 'destructive',
                 title: 'Failed to generate insights.',
-                description: 'The AI model could not be reached. Please try again later.',
+                description: description,
             });
         } finally {
             setLoading(false);
