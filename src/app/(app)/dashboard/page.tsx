@@ -45,6 +45,15 @@ export default function DashboardPage() {
         <SummaryCard title="Calls Made" value="0" />
         <SummaryCard title="Trial End Date" value="27/Nov/25" />
       </div>
+      
+      <Card>
+          <CardHeader>
+              <CardTitle>Note:</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <p className="text-sm text-muted-foreground">If you are on a trial plan then after the trial plan ends your API key will be automatically moved to Free plan if you do not wish to upgrade to a paid plan.</p>
+          </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

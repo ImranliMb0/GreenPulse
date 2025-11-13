@@ -12,15 +12,12 @@ import {
   SidebarTrigger,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
 import {
   LayoutDashboard,
   Code,
   LineChart,
-  Users,
   CreditCard,
   FileText,
   Wrench,
@@ -28,7 +25,7 @@ import {
   Settings,
   ShieldQuestion,
   Loader2,
-  Leaf,
+  CloudSun,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -77,9 +74,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar>
         <SidebarHeader className="p-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Leaf className="h-8 w-8 text-primary" />
+            <CloudSun className="h-8 w-8 text-primary" />
             <span className="font-bold text-lg font-headline group-data-[collapsible=icon]:hidden">
-              API Dashboard
+              Weather API
             </span>
           </Link>
         </SidebarHeader>

@@ -3,29 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowRight, Leaf, Map, Zap, Lightbulb } from 'lucide-react';
+import { ArrowRight, CloudSun, Database, Server, Code } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 
 const features = [
   {
-    icon: <Map className="h-8 w-8 text-primary" />,
-    title: 'Renewable Energy GeoMap',
+    icon: <Server className="h-8 w-8 text-primary" />,
+    title: 'Reliable API',
     description:
-      'Visualize regions with high renewable energy potential using our interactive GeoMap.',
+      'Our API provides reliable and fast weather data for your applications.',
   },
   {
-    icon: <Zap className="h-8 w-8 text-primary" />,
-    title: 'Carbon Emission Reports',
+    icon: <Database className="h-8 w-8 text-primary" />,
+    title: 'Extensive Data',
     description:
-      'Generate real-time carbon emission reports based on your energy consumption.',
+      'Access a wide range of historical and forecast weather data points.',
   },
   {
-    icon: <Lightbulb className="h-8 w-8 text-primary" />,
-    title: 'AI-Driven Insights',
+    icon: <Code className="h-8 w-8 text-primary" />,
+    title: 'Easy to Use',
     description:
-      'Gain actionable insights and analytics to drive local-level implementation.',
+      'Simple integration with clear documentation to get you started quickly.',
   },
 ];
 
@@ -37,9 +37,9 @@ export function HomeComponent() {
     <div className="flex flex-col min-h-screen">
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Leaf className="h-8 w-8 text-primary" />
+          <CloudSun className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-bold font-headline text-foreground">
-            GreenPulse Cloud
+            Weather API
           </h1>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
@@ -82,11 +82,10 @@ export function HomeComponent() {
           </div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
             <h2 className="text-4xl md:text-6xl font-bold font-headline text-foreground tracking-tight">
-              Accelerate a Sustainable Future
+              Get Your Weather Data
             </h2>
             <p className="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-              GreenPulse Cloud is an AI-powered platform to accelerate renewable
-              energy deployment and provide transparent carbon tracking.
+              Your reliable source for weather data.
             </p>
             <div className="mt-10">
               <Button size="lg" asChild>
@@ -103,11 +102,10 @@ export function HomeComponent() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h3 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
-                Powerful Features for a Greener Planet
+                Features
               </h3>
               <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                Our platform provides the tools and insights needed to make a
-                real impact on renewable energy goals.
+                Our platform provides the tools and insights needed to power your applications.
               </p>
             </div>
             <div className="mt-16 grid gap-8 md:grid-cols-3">
@@ -139,7 +137,7 @@ export function HomeComponent() {
       <footer className="py-8 bg-background border-t">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>
-            &copy; {new Date().getFullYear()} GreenPulse Cloud. All rights
+            &copy; {new Date().getFullYear()} Weather API. All rights
             reserved.
           </p>
         </div>
