@@ -32,11 +32,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!loading) {
-      const isAppRoute = pathname.startsWith('/dashboard') || pathname.startsWith('/map') || pathname.startsWith('/report') || pathname.startsWith('/insights');
+      const isAuthRoute = pathname === '/login' || pathname === '/signup';
+      const isAppRoute = !isAuthRoute && pathname !== '/';
+
       if (!user && isAppRoute) {
         router.push('/login');
       }
-      if (user && pathname === '/login') {
+      if (user && isAuthRoute) {
         router.push('/dashboard');
       }
     }

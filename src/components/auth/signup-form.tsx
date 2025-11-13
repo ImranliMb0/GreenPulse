@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
 import {
-  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
@@ -33,7 +33,7 @@ const formSchema = z.object({
   }),
 });
 
-export function LoginForm() {
+export function SignupForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -49,8 +49,8 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      toast({ title: "Successfully signed in." });
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      toast({ title: "Account created successfully." });
     } catch (error: any) {
         toast({
           variant: "destructive",
@@ -78,7 +78,7 @@ export function LoginForm() {
       setIsGoogleLoading(false);
     }
   }
-  
+
   const GoogleIcon = () => (
     <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
       <path
@@ -120,7 +120,7 @@ export function LoginForm() {
           />
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In
+            Sign Up
           </Button>
         </form>
       </Form>
