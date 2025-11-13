@@ -3,15 +3,15 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Allow users to read and write their own user document.
     match /users/{userId} {
-      // Allow users to read and write their own user document.
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
 
-      // Rules for the 'reports' subcollection
-      match /reports/{reportId} {
-        // Allow users to create, read, and list their own reports.
-        allow create, read, list: if request.auth != null && request.auth.uid == userId;
-      }
+    // Rules for the 'reports' subcollection
+    match /users/{userId}/reports/{reportId} {
+      // Allow users to create, read, and list their own reports.
+      allow create, get, list: if request.auth != null && request.auth.uid == userId;
     }
   }
 }
