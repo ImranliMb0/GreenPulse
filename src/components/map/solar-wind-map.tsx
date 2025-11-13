@@ -107,7 +107,7 @@ export default function SolarWindMap() {
     <div className="bg-gradient-to-br from-blue-50 via-white to-green-50 -m-4 sm:-m-6 lg:-m-8 p-4">
       <div className="max-w-7xl mx-auto">
         <header className="text-center mb-6">
-          <h1 className="text-4xl font-bold font-headline text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold font-headline text-foreground mb-2">
             Global Solar & Wind Energy Map
           </h1>
           <p className="text-muted-foreground">
@@ -119,17 +119,14 @@ export default function SolarWindMap() {
           <div className="lg:col-span-2">
             <div className="bg-card rounded-xl shadow-lg p-4">
               <div 
-                className="relative w-full aspect-[2/1] bg-gradient-to-b from-blue-100 to-green-50 rounded-lg cursor-crosshair overflow-hidden border-2 border-border"
+                className="relative w-full aspect-[2/1] rounded-lg cursor-crosshair overflow-hidden border-2 border-border"
                 onClick={handleMapClick}
-                style={{
-                  backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%)'
-                }}
               >
-                <div className="absolute inset-0 opacity-10"
-                  style={{
-                    backgroundImage: `repeating-linear-gradient(0deg, #ccc 0px, #ccc 1px, transparent 1px, transparent 40px),
-                                     repeating-linear-gradient(90deg, #ccc 0px, #ccc 1px, transparent 1px, transparent 60px)`
-                  }}
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg"
+                  alt="World Map"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  draggable="false"
                 />
                 
                 <div className="absolute top-2 left-2 bg-card/90 px-3 py-2 rounded-lg text-sm font-medium text-foreground shadow">
