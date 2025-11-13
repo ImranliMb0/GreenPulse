@@ -35,7 +35,7 @@ export function ReportForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      energyUsedKwh: undefined,
+      energyUsedKwh: '' as any, // Initialize with an empty string
       location: "IN", // Default to India
     },
   })
