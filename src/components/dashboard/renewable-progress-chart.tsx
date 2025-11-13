@@ -1,8 +1,8 @@
 "use client"
 
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { ChartTooltipContent } from "@/components/ui/chart"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 const data = [
   { year: "2019", adoption: 28 },
@@ -13,6 +13,13 @@ const data = [
   { year: "2024", adoption: 45 },
 ]
 
+const chartConfig = {
+  adoption: {
+    label: "Adoption %",
+    color: "hsl(var(--primary))",
+  },
+}
+
 export function RenewableProgressChart() {
   return (
     <Card>
@@ -21,8 +28,8 @@ export function RenewableProgressChart() {
         <CardDescription>Percentage of renewable energy in the grid mix over the years.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+          <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }} accessibilityLayer>
              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="year"
@@ -38,13 +45,13 @@ export function RenewableProgressChart() {
               axisLine={false}
               tickFormatter={(value) => `${value}%`}
             />
-             <Tooltip
+             <ChartTooltip
               content={<ChartTooltipContent />}
               cursor={{ fill: "hsl(var(--muted))" }}
             />
             <Line type="monotone" dataKey="adoption" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4, fill: "hsl(var(--primary))" }} />
           </LineChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   )
