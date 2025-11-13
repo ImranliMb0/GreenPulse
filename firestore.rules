@@ -9,7 +9,7 @@ service cloud.firestore {
 
       // Users can create, read, and list their own carbon reports
       match /reports/{reportId} {
-        allow read, create: if request.auth != null && request.auth.uid == userId;
+        allow list, read, create: if request.auth != null && request.auth.uid == userId;
       }
     }
   }
