@@ -1,3 +1,4 @@
+
 "use server";
 
 import { z } from "zod";
@@ -40,13 +41,6 @@ export async function createCarbonReport(
   try {
     // In a real app, you would call the Climatiq or Carbon Interface API here.
     // We'll simulate it using mock factors.
-    // const climatiqApiKey = process.env.CLIMATIQ_API_KEY;
-    // const headers = { Authorization: `Bearer ${climatiqApiKey}` };
-    // const payload = { ... };
-    // const response = await fetch("https://beta3.api.climatiq.io/estimate", { method: "POST", headers, body: JSON.stringify(payload) });
-    // const data = await response.json();
-    // const emissionKg = data.co2e;
-
     const emissionFactor = emissionFactors[location] || 0.5;
     const emissionKg = energyUsedKwh * emissionFactor;
     const solarPotential = solarPotentials[location] || "Medium";
@@ -60,7 +54,7 @@ export async function createCarbonReport(
     };
     
     // Add server timestamp when saving to Firestore
-    const docRef = await addDoc(collection(db, "users", userId, "reports"), {
+    await addDoc(collection(db, "users", userId, "reports"), {
       ...reportData,
       timestamp: serverTimestamp(),
     });
