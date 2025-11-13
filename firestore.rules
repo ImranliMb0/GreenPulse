@@ -3,14 +3,17 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read and write to their own user document
     match /users/{userId} {
+      // Allow users to read and write their own user document.
       allow read, write: if request.auth != null && request.auth.uid == userId;
 
-      // Users can create, read, and list their own carbon reports
+      // Allow users to create, read, and list their own reports.
       match /reports/{reportId} {
-        allow list, read, create: if request.auth != null && request.auth.uid == userId;
+        allow create, read: if request.auth != null && request.auth.uid == userId;
       }
+      
+      // Explicitly allow listing reports for the owner.
+      allow list: if request.auth != null && request.auth.uid == userId;
     }
   }
 }
