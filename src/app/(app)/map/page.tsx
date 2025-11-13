@@ -1,4 +1,4 @@
-import { GeoMapPlaceholder } from "@/components/map/geo-map-placeholder";
+import { GeoMap } from "@/components/map/geo-map-placeholder";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,7 +8,7 @@ export default function MapPage() {
     return (
         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">
-                <GeoMapPlaceholder />
+                <GeoMap />
             </div>
             <div className="lg:col-span-1">
                 <Card>

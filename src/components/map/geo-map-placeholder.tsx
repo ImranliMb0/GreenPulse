@@ -1,26 +1,80 @@
+"use client";
+
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useState } from "react";
+import { getRenewablePotential } from "@/app/actions/map";
+import { Loader2, Sun, Wind } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-export function GeoMapPlaceholder() {
+type PotentialData = {
+    solarPotential: number;
+    windPotential: number;
+    units: {
+        solar: string;
+        wind: string;
+    }
+}
+
+export function GeoMap() {
   const mapImage = PlaceHolderImages.find((img) => img.id === 'map-placeholder');
+  const [loading, setLoading] = useState(false);
+  const [potential, setPotential] = useState<PotentialData | null>(null);
+  const [clickPosition, setClickPosition] = useState<{x: number, y: number} | null>(null);
+  const { toast } = useToast();
 
-  const potentialPoints = [
-    { top: '30%', left: '40%', color: 'bg-green-500', label: 'High' },
-    { top: '50%', left: '60%', color: 'bg-yellow-500', label: 'Medium' },
-    { top: '70%', left: '30%', color: 'bg-red-500', label: 'Low' },
-    { top: '25%', left: '70%', color: 'bg-green-500', label: 'High' },
-    { top: '60%', left: '80%', color: 'bg-yellow-500', label: 'Medium' },
-  ];
-  
+  const handleMapClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Dummy conversion of pixel coordinates to lat/lng
+    const latitude = 90 - (y / rect.height) * 180;
+    const longitude = (x / rect.width) * 360 - 180;
+
+    setLoading(true);
+    setPotential(null);
+    setClickPosition({ x, y });
+
+    try {
+        const result = await getRenewablePotential({ latitude, longitude });
+        if (result.success && result.data) {
+            setPotential(result.data);
+        } else {
+            throw new Error(result.error || "Failed to fetch data.");
+        }
+    } catch(e: any) {
+        toast({
+            variant: "destructive",
+            title: "Could not fetch renewable potential",
+            description: e.message
+        });
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  const getPotentialLabel = (value: number, type: 'solar' | 'wind') => {
+      if (type === 'solar') {
+          if (value > 600) return 'High';
+          if (value > 300) return 'Medium';
+          return 'Low';
+      } else { // wind
+          if (value > 8) return 'High';
+          if (value > 4) return 'Medium';
+          return 'Low';
+      }
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="font-headline">Renewable Energy Potential</CardTitle>
-        <CardDescription>Color-coded regions indicating solar and wind energy potential.</CardDescription>
+        <CardDescription>Click on the map to get solar and wind energy potential for any location.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border">
+        <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border cursor-pointer" onClick={handleMapClick}>
           {mapImage && (
             <Image
               src={mapImage.imageUrl}
@@ -30,15 +84,38 @@ export function GeoMapPlaceholder() {
               className="object-cover"
             />
           )}
-          {potentialPoints.map((point, index) => (
+          {clickPosition && (
             <div
-              key={index}
-              className="absolute w-4 h-4 rounded-full animate-pulse"
-              style={{ top: point.top, left: point.left, backgroundColor: point.color.split('-')[1] }}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${clickPosition.x}px`, top: `${clickPosition.y}px` }}
             >
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-card px-1 rounded">{point.label}</div>
+                {loading ? (
+                    <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                ) : potential ? (
+                    <div className="p-2 bg-card rounded-lg shadow-lg border text-sm w-48">
+                        <h4 className="font-bold mb-2 font-headline">Potential</h4>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Sun className="w-4 h-4 text-yellow-500" />
+                                <span>Solar:</span>
+                            </div>
+                            <span className={`font-medium ${getPotentialLabel(potential.solarPotential, 'solar') === 'High' ? 'text-green-500' : getPotentialLabel(potential.solarPotential, 'solar') === 'Medium' ? 'text-yellow-600' : 'text-red-500'}`}>
+                                {getPotentialLabel(potential.solarPotential, 'solar')}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                             <div className="flex items-center gap-2">
+                                <Wind className="w-4 h-4 text-blue-500" />
+                                <span>Wind:</span>
+                            </div>
+                            <span className={`font-medium ${getPotentialLabel(potential.windPotential, 'wind') === 'High' ? 'text-green-500' : getPotentialLabel(potential.windPotential, 'wind') === 'Medium' ? 'text-yellow-600' : 'text-red-500'}`}>
+                                {getPotentialLabel(potential.windPotential, 'wind')}
+                            </span>
+                        </div>
+                    </div>
+                ) : null}
             </div>
-          ))}
+          )}
         </div>
         <div className="flex items-center justify-end space-x-4 mt-4 text-sm">
             <div className="flex items-center space-x-2">
